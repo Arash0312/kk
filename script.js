@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to login');
+            throw new Error('پروکسی تلگرامو تغییر بده');
         }
 
         const data = await response.json();
