@@ -1,56 +1,66 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لیست قابل کلیک</title>
+    <title>Stylish Image Viewer</title>
     <style>
         body {
-            background-color: #121212;
-            color: #ffffff;
             font-family: Arial, sans-serif;
-            text-align: center; /* متن را در وسط قرار می‌دهد */
-        }
-        ul {
-            list-style-type: none;
+            text-align: center;
+            margin: 0;
             padding: 0;
+            background-color: #d4edda; /* سبز خاص برای پس‌زمینه */
+            color: #155724; /* رنگ متن متناسب */
+        }
+        .header {
             display: flex;
-            flex-wrap: wrap; /* عناصر را به خط‌های جدید می‌آورد */
-            justify-content: center; /* عناصر را در وسط قرار می‌دهد */
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #c3e6cb; /* سبز روشن برای هدر */
+            border-bottom: 2px solid #155724; /* خط زیرین هدر */
         }
-        li {
-            margin: 10px;
-            width: 45%; /* عرض مشخص برای هر دکمه */
-        }
-        a {
-            display: block; /* نمایش به صورت بلوک */
+        .header button {
+            background-color: #28a745; /* سبز خاص برای دکمه */
+            color: white;
+            border: none;
             padding: 10px 15px;
             border-radius: 5px;
-            background-color: #4caf50; /* رنگ سبز */
-            color: white;
-            text-decoration: none;
-            transition: background-color 0.3s;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
-        a:hover {
-            background-color: #45a049; /* رنگ سبز تیره‌تر در حالت هاور */
+        .header button:hover {
+            background-color: #218838; /* سبز تیره‌تر برای حالت هاور */
+        }
+        img {
+            max-width: 90%;
+            height: auto;
+            margin-top: 20px;
+            border: 5px solid #c3e6cb; /* قاب سبز برای تصویر */
+            border-radius: 10px;
+        }
+        .image-name {
+            margin: 20px 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: #155724; /* سبز متناسب با متن */
         }
     </style>
 </head>
 <body>
-    <h1>-Airdrops-</h1>
-    <ul>
-        <li><a href="https://t.me/notpixel/app?startapp=f5438078953_s651466">NotPixel💫</a></li>
-        <li><a href="https://t.me/theYescoin_bot/Yescoin?startapp=gb99w6_AirdropBeFarsi">YesCoin💫</a></li>
-        <li><a href="https://t.me/major/start?startapp=2118849362-5438078953">Major💫</a></li>
-        <li><a href="https://t.me/notcoin_bot?startapp=er_7532231">Notcoin💫</a></li>
-        <li><a href="https://t.me/blum/app?startapp=tribe_airdropbefarsi-ref_6UAGO8CES1">Blum💫</a></li>
-        <li><a href="https://t.me/coub/app?startapp=coub__marker_17876379">Coub💫</a></li>
-        <li><a href="https://t.me/tonstationgames_bot/app?startapp=ref_fvzhlhfdooqgpcgdn3eugo">TonStation💫</a></li>
-        <li><a href="https://t.me/cexio_tap_bot?startapp=1716280473850462">Cex</a></li>
-        <li><a href="https://t.me/memefi_coin_bot/main?startapp=r_f8b4e1bbfb">Memfi</a></li>
-        <li><a href="https://t.me/catsdogs_game_bot/join?startapp=5438078953">Cats@Dogs</a></li>
-        <li><a href="https://t.me/tapswap_mirror_bot?startapp=r_5438078953">TapSwap</a></li>
-        <li><a href="http://t.me/catsgang_bot/join?startapp=yiOjX34RsD_O9_f8_xCjN">Cats</a></li>
-    </ul>
+
+    <div class="header">
+        <button onclick="history.back()">Go Back</button>
+        <h1>Pepe Usdt</h1>
+    </div>
+
+    <div>
+        <!-- Replace 'image.jpg' with the actual name of your image file -->
+        <img src="Picsart_25-01-04_21-24-29-611.jpg" alt="Image">
+        <div class="image-name">ساعت معرفی: ۲۲:۱۵ در ۱۵ دی ۱۴۰۳</div>
+    </div>
+
 </body>
 </html>
