@@ -3,16 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اتصال به Tonkeeper و ارسال کارمزد</title>
+    <title>اتصال به Tonkeeper</title>
+    <script src="https://unpkg.com/@tonconnect/sdk@latest"></script>
     <script>
-        function sendTransaction() {
-            // اتصال به Tonkeeper برای شروع تراکنش
-            window.location.href = "tonkeeper://transfer/UQCNKhcXrK9cE1h79LROYUacpPkyF30quWHtZ5_Zsakt3r-G?amount=0.01"; // مقدار کارمزد
+        let tonConnect;
+
+        async function initTonConnect() {
+            tonConnect = new TON_CONNECT.TonConnect({
+                manifestUrl: 'https://yourserver.com/tonconnect-manifest.json'
+            });
         }
+
+        async function connectWallet() {
+            try {
+                const wallets = await tonConnect.getWallets();
+                const tonkeeperWallet = wallets.find(wallet => wallet.name === "Tonkeeper");
+
+                if (!tonkeeperWallet) {
+                    alert("کیف پول Tonkeeper یافت نشد. لطفاً آن را نصب کنید.");
+                    return;
+                }
+
+                const connectionResult = await tonConnect.connect({
+                    universalLink: tonkeeperWallet.universalLink,
+                    bridgeUrl: tonkeeperWallet.bridgeUrl
+                });
+
+                alert("اتصال موفق! آدرس کیف پول شما: " + connectionResult.address);
+            } catch (error) {
+                console.error("خطا در اتصال:", error);
+                alert("اتصال به کیف پول ناموفق بود.");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", initTonConnect);
     </script>
 </head>
 <body>
-    <h1>ارسال کارمزد از Tonkeeper</h1>
-    <button onclick="sendTransaction()">ارسال کارمزد</button>
+    <h1>اتصال به کیف پول Tonkeeper</h1>
+    <button onclick="connectWallet()">اتصال به کیف پول</button>
 </body>
 </html>
