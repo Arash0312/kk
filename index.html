@@ -9,7 +9,7 @@
             background-color: black;
             color: lime;
             font-family: monospace;
-            font-size: 16px;
+            font-size: 18px;
             padding: 20px;
             overflow: hidden;
             user-select: none;
@@ -20,8 +20,23 @@
             color: red;
             font-weight: bold;
             text-align: center;
-            font-size: 24px;
-            margin-top: 20%;
+            font-size: 32px;
+            margin-top: 10%;
+            animation: blink 1s infinite alternate;
+        }
+        @keyframes blink {
+            from { opacity: 1; }
+            to { opacity: 0.3; }
+        }
+        .danger-sign {
+            font-size: 50px;
+            color: red;
+            margin-top: 20px;
+        }
+        #terminal {
+            margin-top: 20px;
+            font-size: 22px;
+            color: yellow;
         }
         #passwordInput {
             position: absolute;
@@ -29,15 +44,18 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: black;
-            border: 1px solid lime;
-            color: lime;
+            border: 2px solid red;
+            color: white;
             font-size: 20px;
             padding: 10px;
             display: none;
+            text-align: center;
         }
     </style>
 </head>
 <body oncontextmenu="return false;" onkeydown="return disableKeys(event);">
+    <div class="danger-sign">⚠️⚠️⚠️</div>
+    <div class="warning">خطر! اطلاعات شما در معرض خطر است!</div>
     <div id="terminal">اطلاعات شخصی شما برای سازنده ارسال شد.
     </div>
     <input type="password" id="passwordInput" placeholder="رمز عبور را وارد کنید" onkeydown="checkPassword(event)">
