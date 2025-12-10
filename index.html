@@ -1,122 +1,93 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نفوذ به سیستم</title>
-    <style>
-        body {
-            background-color: black;
-            color: lime;
-            font-family: monospace;
-            font-size: 18px;
-            padding: 20px;
-            overflow: hidden;
-            user-select: none;
-            text-align: center;
-            direction: rtl;
-        }
-        .warning {
-            color: red;
-            font-weight: bold;
-            text-align: center;
-            font-size: 32px;
-            margin-top: 10%;
-            animation: blink 1s infinite alternate;
-        }
-        @keyframes blink {
-            from { opacity: 1; }
-            to { opacity: 0.3; }
-        }
-        .danger-sign {
-            font-size: 50px;
-            color: red;
-            margin-top: 20px;
-        }
-        #terminal {
-            margin-top: 20px;
-            font-size: 22px;
-            color: yellow;
-        }
-        #passwordInput {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: black;
-            border: 2px solid red;
-            color: white;
-            font-size: 20px;
-            padding: 10px;
-            display: none;
-            text-align: center;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Free Daily Cases</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    body {
+        margin: 0;
+        background: #0a0a0f;
+        color: white;
+        font-family: 'Poppins', sans-serif;
+        text-align: center;
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 42px;
+        font-weight: 600;
+        margin-top: 10px;
+        color: #ff2882;
+        text-shadow: 0 0 15px #ff2882;
+    }
+
+    .box {
+        background: linear-gradient(145deg, #1a1a22, #0e0e14);
+        border-radius: 18px;
+        width: 350px;
+        margin: 20px auto;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(255, 0, 107, 0.4);
+        border: 1px solid #ff2882;
+    }
+
+    .btn {
+        display: block;
+        width: 80%;
+        margin: 15px auto;
+        padding: 15px;
+        background: #ff2882;
+        border-radius: 10px;
+        font-size: 18px;
+        text-decoration: none;
+        color: white;
+        transition: 0.25s;
+        box-shadow: 0 4px 12px rgba(255, 0, 120, 0.3);
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 0, 120, 0.8);
+    }
+
+    .footer-text {
+        font-size: 14px;
+        margin-top: 25px;
+        opacity: 0.7;
+    }
+
+    .update-box {
+        margin-top: 25px;
+        font-size: 18px;
+        background: #11151d;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px dashed #ff2882;
+        width: 320px;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 0 10px rgba(255, 0, 120, 0.3);
+    }
+</style>
 </head>
-<body oncontextmenu="return false;" onkeydown="return disableKeys(event);">
-    <div class="danger-sign">⚠️⚠️⚠️</div>
-    <div class="warning">خطر! اطلاعات شما در معرض خطر است!</div>
-    <div id="terminal">اطلاعات شخصی شما برای سازنده ارسال شد.
-    </div>
-    <input type="password" id="passwordInput" placeholder="رمز عبور را وارد کنید" onkeydown="checkPassword(event)">
-    <script>
-        const passwordInput = document.getElementById("passwordInput");
+<body>
 
-        setTimeout(() => {
-            passwordInput.style.display = 'block';
-            passwordInput.focus();
-        }, 2000);
+<h1>Free Daily Cases 🎁</h1>
 
-        function disableMouse() {
-            document.onmousemove = function(event) {
-                event.preventDefault();
-            };
-            document.ontouchmove = function(event) {
-                event.preventDefault();
-            };
-        }
-        disableMouse();
+<div class="box">
+    <a class="btn" href="https://t.me/epic_gift_bot/app?startapp=ref_-gqCyA">Epic Gifts</a>
+    <a class="btn" href="https://t.me/Grab_Giftsbot/grabgifts?startapp=ref_5438078953">Grab Gifts</a>
+    <a class="btn" href="http://t.me/onecase_play_bot/app?startapp=BF0245DA">OneCase</a>
+    <a class="btn" href="https://t.me/majesticgamebot?startapp=r5438078953">MajesticGame</a>
+    <a class="btn" href="https://t.me/virus_play_bot/app?startapp=roulette_inviteCode64R0dNCbdgzrOlTy">Virus</a>
+    <a class="btn" href="https://t.me/GorillaCaseBot/app?startapp=r_5438078953">GorillaCase</a>
+</div>
 
-        function disableKeys(event) {
-            if ([116, 123, 27, 17, 18, 91].includes(event.keyCode) || (event.ctrlKey && [73, 85, 87, 83, 68].includes(event.keyCode))) {
-                event.preventDefault();
-                event.stopPropagation();
-                return false;
-            }
-        }
-        
-        function goFullscreen() {
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            } else if (document.documentElement.mozRequestFullScreen) {
-                document.documentElement.mozRequestFullScreen();
-            } else if (document.documentElement.webkitRequestFullscreen) {
-                document.documentElement.webkitRequestFullscreen();
-            } else if (document.documentElement.msRequestFullscreen) {
-                document.documentElement.msRequestFullscreen();
-            }
-        }
-        
-        setTimeout(goFullscreen, 500);
-        
-        window.history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', function () {
-            window.history.pushState(null, null, document.URL);
-        });
-        
-        let audio = new Audio('https://www.myinstants.com/media/sounds/windows-xp-error.mp3');
-        setTimeout(() => { audio.play(); }, 1000);
-        
-        function checkPassword(event) {
-            if (event.key === 'Enter') {
-                if (passwordInput.value === '1111') {
-                    alert('سیستم بازیابی شد!');
-                    location.reload();
-                } else {
-                    alert('رمز عبور نادرست است!');
-                }
-            }
-        }
-    </script>
+<div class="update-box">More updates coming soon ✨</div>
+
+<div class="footer-text">Telegram Channel: <a href="https://t.me/ArshBemola" style="color:#ff2882;">@ArshBemola</a></div>
+
 </body>
 </html>
